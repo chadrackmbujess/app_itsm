@@ -193,7 +193,7 @@ class MyApp(MDApp):
     def fetch_notifications(self):
         try:
             api_url = "http://127.0.0.1:8000/api/auth/maintenance/alerts/"
-            response = requests.get(api_url, timeout=10)
+            response = requests.get(api_url)
 
             if response.status_code == 200:
                 notifications = response.json().get("alerts", [])
@@ -605,6 +605,9 @@ class MyApp(MDApp):
             ticket_id = ticket['id']
             commentaires = self.get_commentaires_for_ticket(ticket_id)  # Récupérer les commentaires pour ce ticket
             all_commentaires.extend(commentaires)
+            # Supprimer les doublons en utilisant un ensemble (set)
+
+        unique_commentaires = list(set(all_commentaires))
 
         # Créer un layout pour le popup
         popup_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
@@ -619,7 +622,7 @@ class MyApp(MDApp):
         commentaires_layout.bind(minimum_height=commentaires_layout.setter('height'))
 
         # Ajouter chaque commentaire dans le layout
-        for commentaire in all_commentaires:
+        for commentaire in unique_commentaires:
             commentaire_label = Label(text=commentaire, size_hint_y=None, height=40, halign='left', valign='middle')
             commentaires_layout.add_widget(commentaire_label)
 
@@ -1059,7 +1062,7 @@ class MyApp(MDApp):
             headers = {
                 "Authorization": f"Bearer {access_token}"
             }
-            response = requests.post(api_url, json=ticket_data, headers=headers, timeout=10)
+            response = requests.post(api_url, json=ticket_data, headers=headers)
 
             if response.status_code == 201:
                 self.show_popup("Succès", "Ticket créé avec succès !")
@@ -1078,7 +1081,7 @@ class MyApp(MDApp):
             headers = {
                 "Authorization": f"Bearer {access_token}"  # Utiliser le token d'accès pour l'authentification
             }
-            response = requests.get(api_url, headers=headers, timeout=10)
+            response = requests.get(api_url, headers=headers)
 
             if response.status_code == 200:
                 self.tickets = response.json()
