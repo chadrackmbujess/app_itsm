@@ -765,12 +765,15 @@ class MyApp(MDApp):
         # URL de l'API Django pour récupérer les commentaires d'un ticket
         api_url = f"http://127.0.0.1:8000/api/auth/tickets/{ticket_id}/commentaires/"
         headers = {
-            "Authorization": f"Bearer {access_token}"  # Utiliser le token d'accès pour l'authentification
+            "Authorization": f"Bearer {access_token}",  # Utiliser le token d'accès pour l'authentification
+        }
+        params = {
+            "user_id": self.user_id,  # Inclure l'identifiant de l'utilisateur connecté
         }
 
         try:
             # Faire une requête GET à l'API Django
-            response = requests.get(api_url, headers=headers)
+            response = requests.get(api_url, headers=headers, params=params)
             response.raise_for_status()  # Vérifier si la requête a réussi
 
             # Convertir la réponse JSON en liste de commentaires
@@ -997,9 +1000,10 @@ class MyApp(MDApp):
             response = requests.post(api_url, json=data, timeout=10)
 
             if response.status_code == 200:
-                # Stocker le refresh token et le token d'accès
+                # Stocker le refresh token, le token d'accès et l'identifiant de l'utilisateur
                 refresh_token = response.json().get("refresh")
                 access_token = response.json().get("access")
+                self.user_id = response.json().get("user_id")  # Stocker l'identifiant de l'utilisateur
 
                 # Stocker le nom d'utilisateur dans l'attribut de la classe
                 self.username = username
