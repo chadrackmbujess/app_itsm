@@ -79,6 +79,8 @@ class MyApp(MDApp):
         self.root = BoxLayout(orientation='vertical', padding=dp(20), spacing=dp(10))
         self.tabs = TabbedPanel(do_default_tab=False, background_color=BACKGROUND_COLOR)
         self.root.add_widget(self.tabs)
+        # Définir le titre de l'application
+        self.title = "Application ITSM Entreprise JESSMI"
 
         # Onglet d'inscription
         self.register_tab = TabbedPanelItem(text='Inscription', background_normal='', background_down='')
