@@ -206,7 +206,15 @@ class MyApp(MDApp):
         return []
 
     def show_notifications(self, instance):
+        # Récupérer les notifications
         notifications = self.fetch_notifications()
+
+        # Afficher ou traiter les notifications
+        if notifications:
+            print("Notifications récupérées :", notifications)
+            # Vous pouvez également afficher les notifications dans une popup, un label, etc.
+        else:
+            print("Aucune nouvelle notification.")
 
         # Créer une popup pour afficher les notifications
         popup = Popup(title="Notifications", size_hint=(0.8, 0.8))
@@ -406,7 +414,8 @@ class MyApp(MDApp):
         # ✅ Barre d'outils avec MDTopAppBar
         toolbar = MDTopAppBar(
             title=f"Bienvenue {username} - JESSMI",
-            right_action_items=[["bell", lambda x: self.show_notifications()]],
+            #right_action_items=[["bell", lambda x: self.show_notifications()]],
+            right_action_items=[["bell", lambda x: self.show_notifications(x)]],
             elevation=4
         )
         left_layout.add_widget(toolbar)
